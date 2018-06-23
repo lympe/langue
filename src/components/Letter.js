@@ -1,0 +1,85 @@
+import React, { Component } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Animated
+} from 'react-native';
+import * as actions from '../actions';
+import { connect } from 'react-redux';
+
+var WIDTH = Dimensions.get('window').width;
+var HEIGHT = Dimensions.get('window').height;
+
+class Letter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      scale: new Animated.Value(1),
+      opacity: new Animated.Value(1)
+    };
+  }
+  componentDidMount() {
+    if (this.props.letterNumber === this.props.ind) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(this.state.scale, {
+            toValue: 1.1,
+            duration: 200
+          }),
+          Animated.timing(this.state.opacity, {
+            toValue: 0.5,
+            duration: 200,
+            delay: 500
+          }),
+          Animated.timing(this.state.scale, {
+            toValue: 1,
+            duration: 200
+          }),
+          Animated.timing(this.state.opacity, {
+            toValue: 1,
+            duration: 200
+          })
+        ])
+      ).start();
+    }
+  }
+  render() {
+    const container = {
+      transform: [{ scale: this.state.scale }],
+      opacity: this.state.opacity
+    };
+    return (
+      <Animated.View style={[styles.container, container]}>
+        <Text style={styles.text}>{this.props.text}</Text>
+      </Animated.View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: 30,
+    height: 50,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 5,
+    margin: 5
+  },
+  text: {
+    color: '#fff',
+    fontWeight: '800',
+    fontSize: 35
+  }
+});
+
+function mapStateToProps({ game }) {
+  const { letterNumber } = game;
+  return {
+    letterNumber
+  };
+}
+
+export default connect(mapStateToProps, actions)(Letter);
