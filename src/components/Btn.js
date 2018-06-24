@@ -106,7 +106,7 @@ class Btn extends Component {
             ]}
           />
           <Animated.View style={[styles.wrapper, wrapper, this.props.btnSize]}>
-            {this._renderContent()}
+              {this._renderContent()}
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

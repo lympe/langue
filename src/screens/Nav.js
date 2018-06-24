@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#5270FF',
-    paddingTop: Platform.OS === 'ios' ? 30 : 25
+    paddingTop: Platform.OS === 'ios' ? 30 : 0
   }
 });
 
