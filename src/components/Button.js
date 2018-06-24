@@ -14,14 +14,12 @@ import { connect } from 'react-redux';
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
 
-class Btn extends Component {
+class Button extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ind: 0,
-      known: 0,
-      continue: true,
-      translateY: new Animated.Value(-10),
+      visible: true,
+      translateY: new Animated.Value(-5),
       scale: new Animated.Value(this.props.animate === false ? 1 : 0)
     };
   }
@@ -29,56 +27,33 @@ class Btn extends Component {
     Animated.timing(this.state.scale, {
       toValue: 1,
       duration: 350,
-      delay: this.props.delay
+      delay: (this.props.ind + 1) * 60
     }).start();
   }
   _pressBtn() {
     Animated.spring(this.state.translateY, {
       toValue: 0,
-      duration: 350,
+      duration: 250,
       bounciness: 20
     }).start();
   }
   _unPressBtn() {
     Animated.spring(this.state.translateY, {
-      toValue: -10,
-      duration: 350,
+      toValue: -5,
+      duration: 250,
       bounciness: 20
     }).start();
   }
-  _onClick() {
-    if (this.props.to) {
-      this.props.navigate(this.props.to);
-      if (this.props.onClick) {
-        this.props.onClick();
-      }
-    } else {
-      this.props.onPress();
+  onClick() {
+    if (this.state.visible) {
+      this.props.onClick(this.props.text);
     }
-  }
-  _renderContent() {
-    if (this.props.children) {
-      returnthis.props.children;
-    }
-    if (this.props.text) {
-      const textStyle = {
-        fontSize: this.props.fontSize
-      };
-      return <Text style={styles.text}>{this.props.text}</Text>;
-    } else {
-      return (
-        <Image
-          style={[styles.img, this.props.imgSize]}
-          source={this.props.src}
-        />
-      );
-    }
+    this.setState({ visible: false });
   }
   render() {
     const container = {
       backgroundColor: this.props.sideColor,
       transform: [{ scale: this.state.scale }],
-      borderRadius: this.props.radius,
       overflow: 'visible'
     };
     const wrapper = {
@@ -86,27 +61,22 @@ class Btn extends Component {
       transform: [
         { scale: this.state.scale },
         { translateY: this.state.translateY }
-      ],
-      borderRadius: this.props.radius
+      ]
+    };
+    const btnWrapper = {
+      opacity: this.state.visible ? 1 : 0
     };
     return (
       <TouchableWithoutFeedback
         onPressIn={() => this._pressBtn()}
         onPressOut={() => this._unPressBtn()}
-        onPress={() => this._onClick()}
+        onPress={() => this.onClick()}
         style={styles.btn}
       >
-        <View style={{ height: this.props.height }}>
-          <Animated.View
-            style={[
-              styles.container,
-              container,
-              this.props.margin,
-              this.props.btnSize
-            ]}
-          />
-          <Animated.View style={[styles.wrapper, wrapper, this.props.btnSize]}>
-            {this._renderContent()}
+        <View style={[styles.btnWrapper, btnWrapper]}>
+          <Animated.View style={[styles.container, container]} />
+          <Animated.View style={[styles.wrapper, wrapper]}>
+            <Text style={styles.text}>{this.props.text}</Text>
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>
@@ -114,32 +84,36 @@ class Btn extends Component {
   }
 }
 const styles = StyleSheet.create({
-  wrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10
+  btnWrapper: {
+    width: 50,
+    height: 75,
+    margin: 5
   },
   container: {
+    width: 50,
+    height: 70,
+    borderRadius: 10,
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0
   },
   text: {
+    fontSize: 30,
     color: '#fff',
-    fontSize: 20,
     fontWeight: '800'
   },
-  img: {
-    height: 50,
+  wrapper: {
     width: 50,
-    resizeMode: 'contain'
+    height: 70,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   btn: {
-    padding: 10,
-    position: 'relative',
-    backgroundColor: 'green'
+    width: 50,
+    height: 75
   }
 });
 
-export default connect(null, actions)(Btn);
+export default connect(null, actions)(Button);

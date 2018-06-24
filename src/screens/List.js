@@ -14,36 +14,41 @@ import Btn from '../components/Btn';
 import Cat from '../components/Cat';
 import AnimatedScreen from '../components/AnimatedScreen';
 import Header from '../components/Header';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
 
-export default class List extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      translateY: new Animated.Value(0)
+      scale: new Animated.Value(1)
     };
   }
   componentDidMount() {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(this.state.translateY, {
-          toValue: -20,
+        Animated.timing(this.state.scale, {
+          toValue: 1.1,
           bounciness: 20,
           duration: 1000
         }),
-        Animated.timing(this.state.translateY, {
-          toValue: 0,
+        Animated.timing(this.state.scale, {
+          toValue: 1,
           bounciness: 20,
           duration: 1000
         })
       ])
     ).start();
   }
+  play() {
+    this.props.play(this.props.lang);
+  }
   render() {
     const btnWrapper = {
-      transform: [{ translateY: this.state.translateY }]
+      transform: [{ scale: this.state.scale }]
     };
     return (
       <AnimatedScreen from="left" duration={150} style={styles.container}>
@@ -51,6 +56,7 @@ export default class List extends Component {
         <View style={styles.contentWrapper}>
           <View style={{ flex: 1 }}>
             <ScrollView
+              showsHorizontalScrollIndicator={false}
               pagingEnabled={true}
               horizontal={true}
               style={styles.scrollView}
@@ -81,8 +87,10 @@ export default class List extends Component {
               radius={20}
               fontSize={30}
               btnSize={styles.btn}
+              animate={false}
               text="Jouer"
               to="Game"
+              onClick={() => this.play()}
             />
           </Animated.View>
         </View>
@@ -135,3 +143,12 @@ const styles = StyleSheet.create({
     left: 0
   }
 });
+function mapStateToProps({ settings }) {
+  const { lang, langLearn } = settings;
+  return {
+    lang,
+    langLearn
+  };
+}
+
+export default connect(mapStateToProps, actions)(List);

@@ -22,19 +22,19 @@ export default class Duel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      translateY: new Animated.Value(0)
+      scale: new Animated.Value(1)
     };
   }
   componentDidMount() {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(this.state.translateY, {
-          toValue: -20,
+        Animated.timing(this.state.scale, {
+          toValue: 1.1,
           bounciness: 20,
           duration: 1000
         }),
-        Animated.timing(this.state.translateY, {
-          toValue: 0,
+        Animated.timing(this.state.scale, {
+          toValue: 1,
           bounciness: 20,
           duration: 1000
         })
@@ -43,7 +43,7 @@ export default class Duel extends Component {
   }
   render() {
     const btnWrapper = {
-      transform: [{ translateY: this.state.translateY }]
+      transform: [{ scale: this.state.scale }]
     };
     return (
       <AnimatedScreen from="left" duration={150} style={styles.container}>
@@ -51,6 +51,7 @@ export default class Duel extends Component {
         <View style={styles.contentWrapper}>
           <View style={{ flex: 1 }}>
             <ScrollView
+              showsHorizontalScrollIndicator={false}
               pagingEnabled={true}
               horizontal={true}
               style={styles.scrollView}
@@ -81,8 +82,9 @@ export default class Duel extends Component {
               radius={20}
               fontSize={30}
               btnSize={styles.btn}
+              animate={false}
               text="Jouer"
-              to="Settings"
+              to="Game"
             />
           </Animated.View>
         </View>

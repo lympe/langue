@@ -54,7 +54,7 @@ class Letter extends Component {
     };
     return (
       <Animated.View style={[styles.container, container]}>
-        <Text style={styles.text}>{this.props.text}</Text>
+        <Text style={styles.text}>{this.props.letters[this.props.ind]}</Text>
       </Animated.View>
     );
   }
@@ -66,19 +66,23 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'rgba(255,255,255,0.3)',
     borderRadius: 5,
-    margin: 5
+    margin: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   text: {
     color: '#fff',
     fontWeight: '800',
-    fontSize: 35
+    fontSize: 30,
+    textAlign: 'center'
   }
 });
 
 function mapStateToProps({ game }) {
-  const { letterNumber } = game;
+  const { letterNumber, letters } = game;
   return {
-    letterNumber
+    letterNumber,
+    letters
   };
 }
 
