@@ -1,4 +1,5 @@
 export const NAV = 'nav';
+export const POP = 'pop';
 
 export const LETTER_NUMBER = 'letter_number';
 

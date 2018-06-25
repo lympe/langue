@@ -11,6 +11,7 @@ import Chat from './Chat';
 import Victory from './Victory';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import WonHeartPop from '../pops/WonHeartPop';
 
 class Nav extends Component {
   _renderContent() {
@@ -20,6 +21,14 @@ class Nav extends Component {
     if (this.props.view === 'Duel') return <Duel />;
     if (this.props.view === 'Chat') return <Chat />;
     if (this.props.view === 'Victory') return <Victory />;
+  }
+  _renderPop() {
+    if (this.props.pops === 'WonHeartPop') return <WonHeartPop />;
+  }
+  _renderPops() {
+    if (this.props.pops) {
+      return <View style={styles.popWrapper}>{this._renderPop()}</View>;
+    }
   }
   _renderSettings() {
     if (this.props.view === 'Settings') {
@@ -35,6 +44,7 @@ class Nav extends Component {
         <View style={{ flex: 1 }}>
           {this._renderContent()}
           <Footer />
+          {this._renderPops()}
         </View>
       );
     }
@@ -51,6 +61,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#5270FF',
     paddingTop: Platform.OS === 'ios' ? 30 : 0
+  },
+  popWrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
+    backgroundColor: 'rgba(25,25,25,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
