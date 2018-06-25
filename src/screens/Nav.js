@@ -8,6 +8,7 @@ import Login from './Login';
 import Duel from './Duel';
 import Shop from './Shop';
 import Chat from './Chat';
+import Victory from './Victory';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -18,6 +19,7 @@ class Nav extends Component {
     if (this.props.view === 'Shop') return <Shop />;
     if (this.props.view === 'Duel') return <Duel />;
     if (this.props.view === 'Chat') return <Chat />;
+    if (this.props.view === 'Victory') return <Victory />;
   }
   _renderSettings() {
     if (this.props.view === 'Settings') {
@@ -25,6 +27,9 @@ class Nav extends Component {
     }
     if (this.props.view === 'Game') {
       return <Game />;
+    }
+    if (this.props.view === 'Victory') {
+      return <Victory />;
     } else {
       return (
         <View style={{ flex: 1 }}>

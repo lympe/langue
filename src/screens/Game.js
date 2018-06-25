@@ -44,19 +44,39 @@ class Game extends Component {
       nextProps.letters.length - 1 ===
       this.props.list[this.props.wordNumber][this.props.lang].length
     ) {
+      var i,
+        string = '';
+      for (i = 1; i < nextProps.letters.length; i++) {
+        if (nextProps.letters[i]) {
+          string = string + nextProps.letters[i].letter;
+        }
+      }
       if (
-        nextProps.letters.join('') ===
-        this.props.list[this.props.wordNumber][this.props.lang]
+        //victoire
+        string === this.props.list[this.props.wordNumber][this.props.lang]
       ) {
-        this.props.nextWord(
-          this.props.wordNumber,
-          this.props.list,
-          this.props.lang
-        );
-        this._nextWord();
+        if (this.props.wordNumber < this.props.list.length - 1) {
+          this.props.nextWord(
+            this.props.wordNumber,
+            this.props.list,
+            this.props.lang,
+            this.props.wordsKnown
+          );
+        } else {
+          this.props.navigate('Victory');
+        }
       } else {
-        this.props.looseHeart(this.props.heart);
-        this._vibrate();
+        if (this.props.heart !== 1) {
+          this.props.looseHeart(this.props.heart);
+          this._vibrate();
+        } else {
+          this.props.nextWord(
+            this.props.wordNumber,
+            this.props.list,
+            this.props.lang
+          );
+          this._nextWord();
+        }
       }
     }
   }
@@ -105,24 +125,9 @@ class Game extends Component {
   _renderPropositions() {
     return this.props.propositions.map((item, i) => {
       return (
-        <Button
-          ind={i}
-          onClick={letter => this.onClick(letter)}
-          sideColor="#c57403"
-          bgColor="#ff9501"
-          text={item}
-        />
+        <Button ind={i} sideColor="#c57403" bgColor="#ff9501" text={item} />
       );
     });
-  }
-  onClick(letter) {
-    this.props.addLetter(
-      this.props.letterNumber,
-      letter,
-      this.props.letters,
-      this.props.wordNumber,
-      this.props.list
-    );
   }
   _renderHeart() {
     return (
@@ -245,7 +250,15 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps({ game, settings }) {
-  const { heart, list, letters, letterNumber, wordNumber, propositions } = game;
+  const {
+    heart,
+    list,
+    letters,
+    letterNumber,
+    wordNumber,
+    propositions,
+    prop
+  } = game;
   const { lang, langLearn } = settings;
   return {
     heart,
@@ -255,7 +268,8 @@ function mapStateToProps({ game, settings }) {
     wordNumber,
     propositions,
     lang,
-    langLearn
+    langLearn,
+    prop
   };
 }
 

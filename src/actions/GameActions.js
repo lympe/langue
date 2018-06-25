@@ -3,7 +3,8 @@ import {
   LOOSE_HEART,
   ADD_LETTER,
   NEXT_WORD,
-  PLAY
+  PLAY,
+  REMOVE_LETTER
 } from './types';
 
 const ALPHABET = [
@@ -49,31 +50,38 @@ const PROPOSITIONS = [
   { letter: 'y' },
   { letter: 'z' }
 ];
-export const nextLetter = letterNumber => {
-  letterNumber++;
+
+export const removeLetter = (letters, letterNumber, prop) => {
+  if (letters[letterNumber]) {
+    prop[letters[letterNumber].prop] = null;
+  }
+  letters[letterNumber] = null;
   return {
-    type: LETTER_NUMBER,
-    payload: letterNumber
+    type: REMOVE_LETTER,
+    payload: {
+      letters,
+      letterNumber
+    }
   };
 };
 
 export const nextWord = (wordNumber, list, lang) => {
-  var word, propositions, nb, arrayA, alea;
-  var word = list[wordNumber][lang];
   wordNumber++;
+  var word, propositions, nb, arrayA, alea;
+  word = list[wordNumber][lang];
   propositions = word.split('');
   nb = Math.round(propositions.length * 0.4);
   for (i = 0; i < nb; i++) {
     alea = Math.random();
-    propositions.push(ALPHABET[Math.round(alea * ALPHABET.length)]);
+    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length + 1))]);
   }
   propositions = shuffle(propositions);
   return {
     type: NEXT_WORD,
     payload: {
-      wordNumber: wordNumber,
-      list: list,
-      propositions: propositions
+      wordNumber,
+      list,
+      propositions
     }
   };
 };
@@ -84,28 +92,46 @@ export const looseHeart = heart => {
     payload: heart
   };
 };
-export const addLetter = (letterNumber, letter, letters, wordNumber, list) => {
-  letters[letterNumber] = letter;
+export const addLetter = (
+  letterNumber,
+  letter,
+  letters,
+  wordNumber,
+  list,
+  ind,
+  prop
+) => {
+  var i;
+  letters[letterNumber] = { prop: ind, letter };
+  prop[ind] = true;
   letterNumber++;
+  for (i = letters.length; i > 0; i--) {
+    if (!letters[i]) {
+      letterNumber = i;
+    }
+  }
   return {
     type: ADD_LETTER,
     payload: {
       list,
       letters,
-      letterNumber
+      letterNumber,
+      prop
     }
   };
 };
+
 export const play = lang => {
-  var word, propositions, nb, arrayA, alea;
+  var word, propositions, nb, arrayA, alea, i;
   var word = LIST[0][lang];
   propositions = word.split('');
   nb = Math.round(propositions.length * 0.4);
   for (i = 0; i < nb; i++) {
     alea = Math.random();
-    propositions.push(ALPHABET[Math.round(alea * ALPHABET.length)]);
+    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length + 1))]);
   }
   propositions = shuffle(propositions);
+
   return {
     type: PLAY,
     payload: {

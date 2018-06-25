@@ -47,6 +47,13 @@ class Letter extends Component {
       ).start();
     }
   }
+  _onClick() {
+    this.props.removeLetter(
+      this.props.letters,
+      this.props.ind,
+      this.props.prop
+    );
+  }
   render() {
     const container = {
       transform: [{ scale: this.state.scale }],
@@ -54,7 +61,13 @@ class Letter extends Component {
     };
     return (
       <Animated.View style={[styles.container, container]}>
-        <Text style={styles.text}>{this.props.letters[this.props.ind]}</Text>
+        <TouchableOpacity style={styles.btn} onPress={() => this._onClick()}>
+          <Text style={styles.text}>
+            {this.props.letters[this.props.ind]
+              ? this.props.letters[this.props.ind].letter
+              : ''}
+          </Text>
+        </TouchableOpacity>
       </Animated.View>
     );
   }
@@ -70,6 +83,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  btn: {
+    width: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   text: {
     color: '#fff',
     fontWeight: '800',
@@ -79,10 +98,11 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps({ game }) {
-  const { letterNumber, letters } = game;
+  const { letterNumber, letters, prop } = game;
   return {
     letterNumber,
-    letters
+    letters,
+    prop
   };
 }
 

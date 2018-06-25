@@ -30,6 +30,11 @@ class Button extends Component {
       delay: (this.props.ind + 1) * 60
     }).start();
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.wordNumber !== this.props.wordNumber) {
+      this.setState({ visible: true });
+    }
+  }
   _pressBtn() {
     Animated.spring(this.state.translateY, {
       toValue: 0,
@@ -45,10 +50,15 @@ class Button extends Component {
     }).start();
   }
   onClick() {
-    if (this.state.visible) {
-      this.props.onClick(this.props.text);
-    }
-    this.setState({ visible: false });
+    this.props.addLetter(
+      this.props.letterNumber,
+      this.props.text,
+      this.props.letters,
+      this.props.wordNumber,
+      this.props.list,
+      this.props.ind,
+      this.props.prop
+    );
   }
   render() {
     const container = {
@@ -64,7 +74,7 @@ class Button extends Component {
       ]
     };
     const btnWrapper = {
-      opacity: this.state.visible ? 1 : 0
+      opacity: this.props.prop[this.props.ind] ? 0 : 1
     };
     return (
       <TouchableWithoutFeedback
@@ -115,5 +125,15 @@ const styles = StyleSheet.create({
     height: 75
   }
 });
+function mapStateToProps({ game }) {
+  const { letterNumber, letters, wordNumber, list, prop } = game;
+  return {
+    letterNumber,
+    letters,
+    wordNumber,
+    list,
+    prop
+  };
+}
 
-export default connect(null, actions)(Button);
+export default connect(mapStateToProps, actions)(Button);
