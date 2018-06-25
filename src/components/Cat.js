@@ -14,11 +14,17 @@ var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
 
 export default class Cat extends Component {
+  _onClick() {
+    //this.fetchCategories(this.props.text['en'])
+  }
   render() {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => this._onClick()}
+        style={styles.container}
+      >
         <Text style={styles.text}>{this.props.text}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

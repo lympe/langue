@@ -62,20 +62,26 @@ class Game extends Component {
             this.props.lang,
             this.props.wordsKnown
           );
+          this._nextWord();
         } else {
           this.props.navigate('Victory');
         }
       } else {
+        //defaite
         if (this.props.heart !== 1) {
           this.props.looseHeart(this.props.heart);
           this._vibrate();
         } else {
-          this.props.nextWord(
-            this.props.wordNumber,
-            this.props.list,
-            this.props.lang
-          );
-          this._nextWord();
+          if (this.props.wordNumber < this.props.list.length - 1) {
+            this.props.nextWord(
+              this.props.wordNumber,
+              this.props.list,
+              this.props.lang
+            );
+            this._nextWord();
+          } else {
+            this.props.navigate('Victory');
+          }
         }
       }
     }

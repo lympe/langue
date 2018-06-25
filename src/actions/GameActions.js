@@ -54,13 +54,23 @@ const PROPOSITIONS = [
 export const removeLetter = (letters, letterNumber, prop) => {
   if (letters[letterNumber]) {
     prop[letters[letterNumber].prop] = null;
+    reshowProp = letters[letterNumber].prop;
   }
   letters[letterNumber] = null;
+  removedLetter = letterNumber;
+
+  for (i = letters.length; i > 0; i--) {
+    if (!letters[i]) {
+      letterNumber = i;
+    }
+  }
   return {
     type: REMOVE_LETTER,
     payload: {
       letters,
-      letterNumber
+      letterNumber,
+      removedLetter,
+      reshowProp
     }
   };
 };
@@ -73,7 +83,7 @@ export const nextWord = (wordNumber, list, lang) => {
   nb = Math.round(propositions.length * 0.4);
   for (i = 0; i < nb; i++) {
     alea = Math.random();
-    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length + 1))]);
+    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length - 1))]);
   }
   propositions = shuffle(propositions);
   return {
@@ -104,7 +114,6 @@ export const addLetter = (
   var i;
   letters[letterNumber] = { prop: ind, letter };
   prop[ind] = true;
-  letterNumber++;
   for (i = letters.length; i > 0; i--) {
     if (!letters[i]) {
       letterNumber = i;
@@ -128,7 +137,7 @@ export const play = lang => {
   nb = Math.round(propositions.length * 0.4);
   for (i = 0; i < nb; i++) {
     alea = Math.random();
-    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length + 1))]);
+    propositions.push(ALPHABET[Math.round(alea * (ALPHABET.length - 1))]);
   }
   propositions = shuffle(propositions);
 

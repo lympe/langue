@@ -23,6 +23,7 @@ const INITIAL_STATE = {
     { letter: 'a' },
     { letter: 'n' }
   ],
+  removedLetter: null,
   letters: [],
   wordNumber: 0,
   letterNumber: 1,
@@ -47,7 +48,9 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         letters: action.payload.letters,
-        letterNumber: action.payload.letterNumber
+        letterNumber: action.payload.letterNumber,
+        removedLetter: action.payload.removedLetter,
+        reshowProp: action.payload.reshowProp
       };
     case LOOSE_HEART:
       return {

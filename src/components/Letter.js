@@ -98,11 +98,13 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps({ game }) {
-  const { letterNumber, letters, prop } = game;
+  const { letterNumber, letters, prop, removedLetter, reshowProp } = game;
   return {
     letterNumber,
     letters,
-    prop
+    removedLetter,
+    prop,
+    reshowProp
   };
 }
 

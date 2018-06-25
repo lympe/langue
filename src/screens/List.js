@@ -24,7 +24,9 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scale: new Animated.Value(1)
+      scale: new Animated.Value(1),
+      height: 0,
+      scroll: 0
     };
   }
   componentDidMount() {
@@ -46,6 +48,63 @@ class List extends Component {
   play() {
     this.props.play(this.props.lang);
   }
+  _back() {
+    this.setState({ scroll: this.state.scroll - WIDTH });
+    this.refs._ScrollView.scrollTo({
+      x: this.state.scroll - WIDTH,
+      animated: true
+    });
+  }
+  _next() {
+    this.setState({ scroll: this.state.scroll + WIDTH });
+    this.refs._ScrollView.scrollTo({
+      x: this.state.scroll + WIDTH,
+      animated: true
+    });
+  }
+  _getViewSize(event) {
+    var { x, y, width, height } = event.nativeEvent.layout;
+    this.setState({ height });
+  }
+  _renderNextBtn() {
+    if (this.state.scroll < 2 * WIDTH) {
+      const btn = {
+        top: this.state.height / 2 - 30
+      };
+      return (
+        <TouchableOpacity
+          onPress={() => this._next()}
+          style={[styles.chevronBtn, styles.next, btn]}
+        >
+          <Image
+            style={styles.chevronImg}
+            source={require('../../img/next.png')}
+          />
+        </TouchableOpacity>
+      );
+    }
+  }
+  _renderBackBtn() {
+    if (this.state.scroll > 0) {
+      const btn = {
+        top: this.state.height / 2 - 30
+      };
+      return (
+        <TouchableOpacity
+          onPress={() => this._back()}
+          style={[styles.chevronBtn, styles.back, btn]}
+        >
+          <Image
+            style={styles.chevronImg}
+            source={require('../../img/back.png')}
+          />
+        </TouchableOpacity>
+      );
+    }
+  }
+  _onScroll(event) {
+    this.setState({ scroll: event.nativeEvent.contentOffset.x });
+  }
   render() {
     const btnWrapper = {
       transform: [{ scale: this.state.scale }]
@@ -54,29 +113,26 @@ class List extends Component {
       <AnimatedScreen from="left" duration={150} style={styles.container}>
         <Header />
         <View style={styles.contentWrapper}>
-          <View style={{ flex: 1 }}>
+          <View
+            style={{ flex: 1 }}
+            onLayout={event => this._getViewSize(event)}
+          >
             <ScrollView
               showsHorizontalScrollIndicator={false}
               pagingEnabled={true}
               horizontal={true}
               style={styles.scrollView}
+              ref="_ScrollView"
+              onScroll={event => this._onScroll(event)}
+              onScrollEndDrag={event => this._onScroll(event)}
+              scrollEventThrottle={160}
             >
-              <Cat text="Couleurs" />
+              <Cat text={'Couleurs'} />
               <Cat text="Animaux" />
               <Cat />
             </ScrollView>
-            <TouchableOpacity style={[styles.chevronBtn, styles.back]}>
-              <Image
-                style={styles.chevronImg}
-                source={require('../../img/back.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.chevronBtn, styles.next]}>
-              <Image
-                style={styles.chevronImg}
-                source={require('../../img/next.png')}
-              />
-            </TouchableOpacity>
+            {this._renderBackBtn()}
+            {this._renderNextBtn()}
           </View>
           <Animated.View style={[styles.btnWrapper, btnWrapper]}>
             <Btn
@@ -120,9 +176,10 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   chevronImg: {
-    width: 60,
+    width: 40,
     resizeMode: 'contain',
-    height: 60
+    height: 40,
+    margin: 10
   },
   scrollView: {
     width: WIDTH,
