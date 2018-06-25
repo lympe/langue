@@ -67,7 +67,7 @@ class Game extends Component {
           this.props.navigate('Victory');
         }
       } else {
-        //defaite
+        //defaitegg
         if (this.props.heart !== 1) {
           this.props.looseHeart(this.props.heart);
           this._vibrate();
