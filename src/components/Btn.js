@@ -58,7 +58,7 @@ class Btn extends Component {
   }
   _renderContent() {
     if (this.props.children) {
-      returnthis.props.children;
+      return this.props.children;
     }
     if (this.props.text) {
       const textStyle = {
@@ -106,7 +106,7 @@ class Btn extends Component {
             ]}
           />
           <Animated.View style={[styles.wrapper, wrapper, this.props.btnSize]}>
-              {this._renderContent()}
+            {this._renderContent()}
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

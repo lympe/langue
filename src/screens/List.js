@@ -141,7 +141,7 @@ class List extends Component {
               bgColor="#ffeb3b"
               delay={300}
               radius={20}
-              fontSize={30}
+              fontSize={40}
               btnSize={styles.btn}
               animate={false}
               text="Jouer"

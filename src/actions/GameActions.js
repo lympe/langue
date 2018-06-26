@@ -1,10 +1,14 @@
 import {
   LETTER_NUMBER,
   LOOSE_HEART,
+  WON_HEART,
   ADD_LETTER,
   NEXT_WORD,
   PLAY,
-  REMOVE_LETTER
+  REMOVE_LETTER,
+  NOT_LAST_CHANCE,
+  CHANGE_ANSWER,
+  GOOD_ANSWER
 } from './types';
 
 const ALPHABET = [
@@ -100,6 +104,24 @@ export const looseHeart = heart => {
   return {
     type: LOOSE_HEART,
     payload: heart
+  };
+};
+export const changeAnswer = answer => {
+  return {
+    type: CHANGE_ANSWER,
+    payload: answer
+  };
+};
+export const changeGoodAnswer = goodAnswer => {
+  goodAnswer++;
+  return {
+    type: GOOD_ANSWER,
+    payload: goodAnswer
+  };
+};
+export const notLastChance = () => {
+  return {
+    type: NOT_LAST_CHANCE
   };
 };
 export const addLetter = (

@@ -55,6 +55,7 @@ class Game extends Component {
         //victoire
         string === this.props.list[this.props.wordNumber][this.props.lang]
       ) {
+        this.props.changeGoodAnswer(this.props.goodAnswer);
         if (this.props.wordNumber < this.props.list.length - 1) {
           this.props.nextWord(
             this.props.wordNumber,
@@ -72,15 +73,28 @@ class Game extends Component {
           this.props.looseHeart(this.props.heart);
           this._vibrate();
         } else {
-          if (this.props.wordNumber < this.props.list.length - 1) {
-            this.props.nextWord(
-              this.props.wordNumber,
-              this.props.list,
-              this.props.lang
-            );
-            this._nextWord();
+          if (nextProps.lastChance) {
+            this.props.poper('LastChancePop');
           } else {
-            this.props.navigate('Victory');
+            if (this.props.wordNumber < this.props.list.length - 1) {
+              this.props.changeAnswer(
+                this.props.list[this.props.wordNumber][this.props.lang]
+              );
+              this.props.poper('AnswerPop');
+              this.props.nextWord(
+                this.props.wordNumber,
+                this.props.list,
+                this.props.lang,
+                this.props.wordsKnown
+              );
+              this._nextWord();
+            } else {
+              this.props.changeAnswer(
+                this.props.list[this.props.wordNumber][this.props.lang]
+              );
+              this.props.poper('AnswerPop');
+              this.props.navigate('Victory');
+            }
           }
         }
       }
@@ -131,7 +145,13 @@ class Game extends Component {
   _renderPropositions() {
     return this.props.propositions.map((item, i) => {
       return (
-        <Button ind={i} sideColor="#c57403" bgColor="#ff9501" text={item} />
+        <Button
+          key={i}
+          ind={i}
+          sideColor="#c57403"
+          bgColor="#ff9501"
+          text={item}
+        />
       );
     });
   }
@@ -263,7 +283,9 @@ function mapStateToProps({ game, settings }) {
     letterNumber,
     wordNumber,
     propositions,
-    prop
+    prop,
+    lastChance,
+    goodAnswer
   } = game;
   const { lang, langLearn } = settings;
   return {
@@ -275,7 +297,9 @@ function mapStateToProps({ game, settings }) {
     propositions,
     lang,
     langLearn,
-    prop
+    prop,
+    lastChance,
+    goodAnswer
   };
 }
 

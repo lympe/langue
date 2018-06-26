@@ -8,10 +8,13 @@ import Login from './Login';
 import Duel from './Duel';
 import Shop from './Shop';
 import Chat from './Chat';
+import Pop from '../pops/Pop';
 import Victory from './Victory';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import WonHeartPop from '../pops/WonHeartPop';
+import LastChancePop from '../pops/LastChancePop';
+import ChooseLangPop from '../pops/ChooseLangPop';
+import AnswerPop from '../pops/AnswerPop';
 
 class Nav extends Component {
   _renderContent() {
@@ -22,15 +25,27 @@ class Nav extends Component {
     if (this.props.view === 'Chat') return <Chat />;
     if (this.props.view === 'Victory') return <Victory />;
   }
-  _renderPop() {
-    if (this.props.pops === 'WonHeartPop') return <WonHeartPop />;
-  }
   _renderPops() {
-    if (this.props.pops) {
-      return <View style={styles.popWrapper}>{this._renderPop()}</View>;
-    }
+    if (this.props.pop === 'LastChancePop')
+      return (
+        <Pop onClick={() => this.props.notLastChance()}>
+          <LastChancePop />
+        </Pop>
+      );
+    if (this.props.firstTime)
+      return (
+        <Pop canClose={false}>
+          <ChooseLangPop />
+        </Pop>
+      );
+    if (this.props.pop === 'AnswerPop')
+      return (
+        <Pop color="#ff9501">
+          <AnswerPop />
+        </Pop>
+      );
   }
-  _renderSettings() {
+  _renderView() {
     if (this.props.view === 'Settings') {
       return <Settings />;
     }
@@ -44,13 +59,17 @@ class Nav extends Component {
         <View style={{ flex: 1 }}>
           {this._renderContent()}
           <Footer />
-          {this._renderPops()}
         </View>
       );
     }
   }
   render() {
-    return <View style={styles.container}>{this._renderSettings()}</View>;
+    return (
+      <View style={styles.container}>
+        {this._renderView()}
+        {this._renderPops()}
+      </View>
+    );
   }
 }
 
@@ -61,23 +80,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#5270FF',
     paddingTop: Platform.OS === 'ios' ? 30 : 0
-  },
-  popWrapper: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
-    backgroundColor: 'rgba(25,25,25,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 });
 
-function mapStateToProps({ nav }) {
-  const { view } = nav;
+function mapStateToProps({ nav, settings }) {
+  const { view, pop } = nav;
+  const { firstTime } = settings;
   return {
-    view
+    view,
+    pop,
+    firstTime
   };
 }
 

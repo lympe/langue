@@ -1,12 +1,15 @@
 import {
   LETTER_NUMBER,
   LOOSE_HEART,
+  WON_HEART,
   GOOD_ANSWER,
   NEXT_WORD,
   WORD_NUMBER,
   ADD_LETTER,
   PLAY,
-  REMOVE_LETTER
+  REMOVE_LETTER,
+  NOT_LAST_CHANCE,
+  CHANGE_ANSWER
 } from '../actions/types';
 const EMPTY_ARRAY = [];
 const INITIAL_STATE = {
@@ -23,12 +26,15 @@ const INITIAL_STATE = {
     { letter: 'a' },
     { letter: 'n' }
   ],
+  lastChance: true,
   removedLetter: null,
   letters: [],
   wordNumber: 0,
   letterNumber: 1,
   prop: [],
-  wordsKnown: 0
+  wordsKnown: 0,
+  answer: 'réponse',
+  goodAnswer: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -52,6 +58,12 @@ export default (state = INITIAL_STATE, action) => {
         removedLetter: action.payload.removedLetter,
         reshowProp: action.payload.reshowProp
       };
+    case NOT_LAST_CHANCE:
+      return { ...state, lastChance: false };
+    case CHANGE_ANSWER:
+      return { ...state, answer: action.payload };
+    case GOOD_ANSWER:
+      return { ...state, goodAnswer: action.payload };
     case LOOSE_HEART:
       return {
         ...state,
@@ -73,6 +85,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         letters: [null],
         prop: [],
+        lastChance: true,
         letterNumber: 1,
         heart: 3,
         wordNumber: action.payload.wordNumber,
