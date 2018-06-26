@@ -19,12 +19,11 @@ export default class Cat extends Component {
   }
   render() {
     return (
-      <TouchableOpacity
-        onPress={() => this._onClick()}
-        style={styles.container}
-      >
-        <Text style={styles.text}>{this.props.text}</Text>
-      </TouchableOpacity>
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <Text style={styles.text}>{this.props.text}</Text>
+        </View>
+      </View>
     );
   }
 }
@@ -33,10 +32,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: WIDTH,
-    borderWidth: 5,
-    borderColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 25
+  },
+  wrapper: {
+    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    width: WIDTH - 30,
     padding: 25
   },
   text: {

@@ -15,7 +15,7 @@ var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
 
 class Header extends Component {
-  _onclick() {
+  _onClick() {
     if (this.props.back) {
       this.props.navigate('List');
     } else {
@@ -27,13 +27,13 @@ class Header extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.settingsBtn}
-          onPress={() => this._onclick()}
+          onPress={() => this._onClick()}
         >
           <Image
             style={styles.cog}
             source={
               this.props.back
-                ? require('../../img/back.png')
+                ? require('../../img/home.png')
                 : require('../../img/cog.png')
             }
           />
@@ -61,15 +61,17 @@ const styles = StyleSheet.create({
   gemsBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: WIDTH / 3
+    justifyContent: 'flex-end',
+    width: WIDTH / 3,
+    paddingRight: 10
   },
   settingsBtn: {
     height: 60,
     width: 60,
     justifyContent: 'center',
-    alignItems: 'center',
-    width: WIDTH / 3
+    alignItems: 'flex-start',
+    width: WIDTH / 3,
+    paddingLeft: 10
   },
   cog: {
     width: 30,

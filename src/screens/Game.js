@@ -196,9 +196,20 @@ class Game extends Component {
       <AnimatedScreen from="bottom" duration={150} style={styles.container}>
         <Animated.View style={container}>
           <View style={styles.gameHeader}>
-            <Text style={styles.text}>
-              {this.props.wordNumber}/{this.props.list.length}
-            </Text>
+            <View style={styles.headerItem}>
+              <TouchableOpacity
+                style={styles.settingsBtn}
+                onPress={() => this.props.navigate('List')}
+              >
+                <Image
+                  style={styles.back}
+                  source={require('../../img/home.png')}
+                />
+              </TouchableOpacity>
+              <Text style={styles.text}>
+                {this.props.wordNumber}/{this.props.list.length}
+              </Text>
+            </View>
             {this._renderHeart()}
           </View>
           <Animated.View style={wrapper}>
@@ -236,7 +247,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '800',
     color: '#fff',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 20
   },
   propositionsWrapper: {
     flex: 1,
@@ -261,13 +273,24 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 20
   },
+  headerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  back: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain'
+  },
   heartWrapper: {
     flexDirection: 'row'
   },
   text: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#fff'
+    color: '#fff',
+    marginLeft: 10
   },
   btn: {
     width: 50,

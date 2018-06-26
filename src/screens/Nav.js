@@ -13,7 +13,7 @@ import Victory from './Victory';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import LastChancePop from '../pops/LastChancePop';
-import ChooseLangPop from '../pops/ChooseLangPop';
+import FirstOpenPop from '../pops/FirstOpenPop';
 import AnswerPop from '../pops/AnswerPop';
 
 class Nav extends Component {
@@ -35,7 +35,7 @@ class Nav extends Component {
     if (this.props.firstTime)
       return (
         <Pop canClose={false}>
-          <ChooseLangPop />
+          <FirstOpenPop />
         </Pop>
       );
     if (this.props.pop === 'AnswerPop')
